@@ -76,6 +76,11 @@ class MockAnthropic:
 class GeminiClientWrapper:
     def __init__(self, api_key):
         from google import genai
+        # Clean the key of quotes, whitespace, or assignment prefixes
+        if api_key:
+            api_key = api_key.strip().strip('"').strip("'")
+            if "=" in api_key:
+                api_key = api_key.split("=")[-1].strip().strip('"').strip("'")
         self.client = genai.Client(api_key=api_key)
         self.messages = self
 

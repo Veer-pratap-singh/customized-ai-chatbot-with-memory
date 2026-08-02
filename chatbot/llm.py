@@ -291,6 +291,12 @@ def stream_ai_response(contents, api_key=None):
             gemini_key = st.secrets.get("GEMINI_API_KEY") or st.secrets.get("ANTHROPIC_API_KEY")
         except Exception:
             pass
+            
+    # Clean the key of quotes, whitespace, or assignment prefixes (e.g. GEMINI_API_KEY = "...")
+    if gemini_key:
+        gemini_key = gemini_key.strip().strip('"').strip("'")
+        if "=" in gemini_key:
+            gemini_key = gemini_key.split("=")[-1].strip().strip('"').strip("'")
     
     # If the key is 'mock' or starts with 'replace_', treat as mock mode
     if gemini_key and (gemini_key.lower() == "mock" or gemini_key.startswith("replace_")):
