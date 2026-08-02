@@ -103,7 +103,7 @@ def build_rag_context(user_message):
 
     return context, chunks
 
-def get_ai_response(user_message):
+def get_ai_response(user_message, api_key=None):
 
     # -----------------------------------
     # Save User Message
@@ -262,9 +262,9 @@ def get_ai_response(user_message):
 
     ]
 
-    return stream_ai_response(contents)
+    return stream_ai_response(contents, api_key=api_key)
 
-def stream_ai_response(contents):
+def stream_ai_response(contents, api_key=None):
 
     # ------------------------------------
     # Extract Prompt
@@ -284,7 +284,7 @@ def stream_ai_response(contents):
     full_response = ""
 
     # Load Key (check both GEMINI_API_KEY and ANTHROPIC_API_KEY as fallback)
-    gemini_key = os.getenv("GEMINI_API_KEY") or os.getenv("ANTHROPIC_API_KEY")
+    gemini_key = api_key or os.getenv("GEMINI_API_KEY") or os.getenv("ANTHROPIC_API_KEY")
     if not gemini_key:
         try:
             import streamlit as st

@@ -36,7 +36,15 @@ else:
 # Sidebar
 
 
-st.sidebar.title(" AI Chatbot")
+st.sidebar.title("🤖 AI Chatbot")
+st.sidebar.markdown("---")
+
+st.sidebar.subheader("API Configuration")
+user_api_key = st.sidebar.text_input(
+    "Enter Gemini API Key",
+    type="password",
+    help="Enter your custom Gemini API key. If left blank, the app will use the default system key if configured."
+)
 
 st.sidebar.markdown("---")
 
@@ -164,7 +172,7 @@ if prompt:
 
         with st.spinner("Thinking..."):
 
-            response = get_ai_response(prompt)
+            response = get_ai_response(prompt, api_key=user_api_key)
 
             
         with st.chat_message("assistant"):
