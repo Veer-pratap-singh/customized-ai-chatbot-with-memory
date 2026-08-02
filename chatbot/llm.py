@@ -285,6 +285,12 @@ def stream_ai_response(contents):
 
     # Load Key (check both GEMINI_API_KEY and ANTHROPIC_API_KEY as fallback)
     gemini_key = os.getenv("GEMINI_API_KEY") or os.getenv("ANTHROPIC_API_KEY")
+    if not gemini_key:
+        try:
+            import streamlit as st
+            gemini_key = st.secrets.get("GEMINI_API_KEY") or st.secrets.get("ANTHROPIC_API_KEY")
+        except Exception:
+            pass
     
     # If the key is 'mock' or starts with 'replace_', treat as mock mode
     if gemini_key and (gemini_key.lower() == "mock" or gemini_key.startswith("replace_")):
@@ -332,13 +338,13 @@ def stream_ai_response(contents):
             # Simple keyword matching offline mock for memory retention verification
             user_name = "Veer Pratap"
             for msg in memory.get_history():
-                content = msg["content"].lower()
+                content = msg["text"].lower()
                 if "my name is " in content:
-                    parts = msg["content"].split("my name is ")
+                    parts = msg["text"].split("my name is ")
                     if len(parts) > 1:
                         user_name = parts[1].strip().strip(".").strip('"').strip("'").title()
                 elif "i am " in content:
-                    parts = msg["content"].split("i am ")
+                    parts = msg["text"].split("i am ")
                     if len(parts) > 1:
                         user_name = parts[1].strip().strip(".").strip('"').strip("'").title()
 
